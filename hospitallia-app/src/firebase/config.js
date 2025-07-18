@@ -1,6 +1,6 @@
-// src/firebase/config.js
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAa5ZltFwco-ka-I3efJgR5QUPuvRq8Qzs",
@@ -9,11 +9,11 @@ const firebaseConfig = {
   storageBucket: "hospitallia-app.firebasestorage.app",
   messagingSenderId: "572644743390",
   appId: "1:572644743390:web:d6b8b83d64144271208a4f",
-  measurementId: "G-P29EWZ5F61",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { app, analytics };
+export { app, auth, db };
