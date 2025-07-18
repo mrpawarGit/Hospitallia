@@ -5,20 +5,10 @@ function App() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-red-600 text-center mt-10">
-        Vite + React
+      {" "}
+      <h1 className="text-3xl font-bold text-blue-600 text-center mt-10">
+        Hospital Management App
       </h1>
-      <div className="card">
-        <button className="cursor-pointer" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   );
 }
