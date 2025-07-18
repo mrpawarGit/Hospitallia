@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -8,11 +9,13 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -20,18 +23,17 @@ const SignIn = () => {
         password
       );
       const user = userCredential.user;
-
-      // Fetch user role from Firestore
       const userDocRef = doc(db, "users", user.uid);
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
-        const userData = userSnap.data();
-        const userRole = userData.role;
-
-        alert(`Signed in as ${userRole}`);
-        // Here, you can store userRole in your app state (Redux/Context) and redirect accordingly.
-        // For example: setUser({ ...userData, uid: user.uid });
+        const userRole = userSnap.data().role;
+        // Redirect based on user role
+        if (userRole === "admin") navigate("/admin");
+        else if (userRole === "doctor") navigate("/doctor");
+        else if (userRole === "staff") navigate("/staff");
+        else if (userRole === "patient") navigate("/patient");
+        else navigate("/");
       } else {
         setError("User record not found. Please contact admin.");
       }
@@ -42,35 +44,52 @@ const SignIn = () => {
   };
 
   return (
-    <form onSubmit={handleSignIn} className="space-y-4 max-w-sm mx-auto">
-      <h2 className="text-2xl font-bold">Sign In</h2>
-      {error && <div className="text-red-600">{error}</div>}
-      <input
-        className="border px-2 py-1 rounded w-full"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <input
-        className="border px-2 py-1 rounded w-full"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <button
-        className={`bg-blue-600 text-white py-1 px-4 rounded ${
-          loading ? "opacity-50" : ""
-        }`}
-        type="submit"
-        disabled={loading}
+    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50">
+      <form
+        onSubmit={handleSignIn}
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-sm space-y-4"
       >
-        {loading ? "Signing in..." : "Sign In"}
-      </button>
-    </form>
+        <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">
+          Login
+        </h2>
+        {error && (
+          <div className="text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1 text-center text-sm">
+            {error}
+          </div>
+        )}
+        <input
+          className="border px-3 py-2 rounded w-full focus:outline-blue-300"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+        />
+        <input
+          className="border px-3 py-2 rounded w-full focus:outline-blue-300"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
+        <button
+          className={`w-full bg-blue-600 cursor-pointer text-white py-2 rounded hover:bg-blue-700 transition ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
+          }`}
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? "Signing in..." : "Login"}
+        </button>
+        <div className="text-center text-gray-500 text-sm">
+          Don&apos;t have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign Up
+          </Link>
+        </div>
+      </form>
+    </div>
   );
 };
 
