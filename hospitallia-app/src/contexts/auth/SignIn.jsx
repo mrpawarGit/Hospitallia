@@ -1,22 +1,44 @@
 import { useState } from "react";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("Signed in successfully");
-      // Redirect to dashboard or home here
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Fetch user role from Firestore
+      const userDocRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userDocRef);
+
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const userRole = userData.role;
+
+        alert(`Signed in as ${userRole}`);
+        // Here, you can store userRole in your app state (Redux/Context) and redirect accordingly.
+        // For example: setUser({ ...userData, uid: user.uid });
+      } else {
+        setError("User record not found. Please contact admin.");
+      }
     } catch (err) {
       setError("Invalid email or password");
     }
+    setLoading(false);
   };
 
   return (
@@ -40,10 +62,13 @@ const SignIn = () => {
         required
       />
       <button
-        className="bg-blue-600 text-white py-1 px-4 rounded"
+        className={`bg-blue-600 text-white py-1 px-4 rounded ${
+          loading ? "opacity-50" : ""
+        }`}
         type="submit"
+        disabled={loading}
       >
-        Sign In
+        {loading ? "Signing in..." : "Sign In"}
       </button>
     </form>
   );

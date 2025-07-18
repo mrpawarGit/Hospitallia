@@ -1,23 +1,41 @@
 import { useState } from "react";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      // 1. Create user in Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      // 2. Store user details including role in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email,
+        role,
+        createdAt: new Date().toISOString(),
+      });
       alert("Account created. You can now sign in.");
       setEmail("");
       setPassword("");
+      setRole("");
     } catch (err) {
       setError(err.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -40,11 +58,26 @@ const SignUp = () => {
         placeholder="Password"
         required
       />
-      <button
-        className="bg-blue-500 text-white py-1 px-4 rounded"
-        type="submit"
+      <select
+        className="border px-2 py-1 rounded w-full"
+        value={role}
+        onChange={(e) => setRole(e.target.value)}
+        required
       >
-        Sign Up
+        <option value="">Select Role</option>
+        <option value="patient">Patient</option>
+        <option value="doctor">Doctor</option>
+        <option value="staff">Staff</option>
+        {/* Optionally allow admin creation only from a protected area */}
+      </select>
+      <button
+        className={`bg-blue-500 text-white py-1 px-4 rounded ${
+          loading ? "opacity-50" : ""
+        }`}
+        type="submit"
+        disabled={loading}
+      >
+        {loading ? "Signing up..." : "Sign Up"}
       </button>
     </form>
   );
