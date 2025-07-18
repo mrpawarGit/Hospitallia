@@ -10,7 +10,10 @@ const LogoutButton = () => {
     navigate("/login");
   };
   return (
-    <button onClick={handleLogout} className="text-red-600 font-semibold ml-2">
+    <button
+      onClick={handleLogout}
+      className="text-red-600 font-semibold ml-2 cursor-pointer"
+    >
       Logout
     </button>
   );

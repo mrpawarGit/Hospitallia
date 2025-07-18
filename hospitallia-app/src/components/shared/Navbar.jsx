@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext"; // make sure this path is correct!
-import LogoutButton from "./LogoutButton"; // Optional, if you added the Logout component
+import { useAuth } from "../../contexts/AuthContext";
+import LogoutButton from "./LogoutButton";
 
 const Navbar = () => {
   const { currentUser, role } = useAuth();
@@ -21,6 +21,9 @@ const Navbar = () => {
         </Link>
         {/* Navigation links */}
         <div className="space-x-6 flex items-center">
+          <Link className="text-gray-600 hover:text-blue-700" to="/">
+            Home
+          </Link>
           {!currentUser ? (
             // Not logged in: Show Login/Signup
             <>
