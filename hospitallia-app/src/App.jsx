@@ -1,13 +1,12 @@
-import { useState } from "react";
+import React from "react";
+import Navbar from "./components/shared/Navbar";
+import AppRoutes from "./router/Routes";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1 className="text-3xl font-bold text-blue-600 text-center mt-10">
-        Hospital Management App
-      </h1>
+      <Navbar />
+      <AppRoutes />
     </>
   );
 }
