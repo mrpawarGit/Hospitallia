@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = () => {
+  const [name, setName] = useState(""); // ← new
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
@@ -15,20 +16,20 @@ const SignUp = () => {
     setError("");
     setLoading(true);
     try {
-      // 1. Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
       const user = userCredential.user;
-      // 2. Store user details including role in Firestore
       await setDoc(doc(db, "users", user.uid), {
+        name, // ← new
         email,
         role,
         createdAt: new Date().toISOString(),
       });
       alert("Account created. You can now sign in.");
+      setName(""); // ← new
       setEmail("");
       setPassword("");
       setRole("");
@@ -42,6 +43,14 @@ const SignUp = () => {
     <form onSubmit={handleSignUp} className="space-y-4 max-w-sm mx-auto">
       <h2 className="text-2xl font-bold">Sign Up</h2>
       {error && <div className="text-red-600">{error}</div>}
+      <input
+        className="border px-2 py-1 rounded w-full"
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Full Name"
+        required
+      />
       <input
         className="border px-2 py-1 rounded w-full"
         type="email"
