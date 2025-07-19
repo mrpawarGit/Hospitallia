@@ -21,6 +21,12 @@ import AppointmentList from "../pages/appointments/AppointmentList";
 import AddAppointment from "../pages/appointments/AddAppointment";
 import EditAppointment from "../pages/appointments/EditAppointment";
 
+// Medical Records management imports
+import MedicalRecordList from "../pages/medicalRecords/MedicalRecordList";
+import AddMedicalRecord from "../pages/medicalRecords/AddMedicalRecord";
+import EditMedicalRecord from "../pages/medicalRecords/EditMedicalRecord";
+import MedicalRecordDetails from "../pages/medicalRecords/MedicalRecordDetails";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -29,7 +35,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
 
-      {/* Patient Management: Protected CRUD routes */}
+      {/* Patient Management */}
       <Route
         path="/patients"
         element={
@@ -55,7 +61,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Appointment Management: Protected CRUD routes */}
+      {/* Appointment Management */}
       <Route
         path="/appointments"
         element={
@@ -77,6 +83,44 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin", "staff"]}>
             <EditAppointment />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Medical Records Management */}
+      <Route
+        path="/medical-records"
+        element={
+          <ProtectedRoute
+            allowedRoles={["admin", "staff", "doctor", "patient"]}
+          >
+            <MedicalRecordList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medical-records/add"
+        element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <AddMedicalRecord />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medical-records/edit/:id"
+        element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <EditMedicalRecord />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medical-records/:id"
+        element={
+          <ProtectedRoute
+            allowedRoles={["admin", "staff", "doctor", "patient"]}
+          >
+            <MedicalRecordDetails />
           </ProtectedRoute>
         }
       />
@@ -115,7 +159,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* 404 fallback at very end */}
+      {/* 404 fallback */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
