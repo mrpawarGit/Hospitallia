@@ -27,6 +27,18 @@ import AddMedicalRecord from "../pages/medicalRecords/AddMedicalRecord";
 import EditMedicalRecord from "../pages/medicalRecords/EditMedicalRecord";
 import MedicalRecordDetails from "../pages/medicalRecords/MedicalRecordDetails";
 
+// --- New! Billing management imports ---
+import BillingList from "../pages/billing/BillingList";
+import AddBill from "../pages/billing/AddBill";
+import EditBill from "../pages/billing/EditBill";
+
+// --- New! User management imports ---
+import UserList from "../pages/users/UserList";
+import UserDetails from "../pages/users/UserDetails";
+
+// --- New! Profile page import ---
+import Profile from "../pages/Profile";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -121,6 +133,62 @@ export default function AppRoutes() {
             allowedRoles={["admin", "staff", "doctor", "patient"]}
           >
             <MedicalRecordDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* --- NEW: Billing/Invoices Management --- */}
+      <Route
+        path="/billing"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <BillingList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/billing/add"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <AddBill />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/billing/edit/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <EditBill />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* --- NEW: User Management (ADMIN ONLY) --- */}
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserDetails />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* --- NEW: User Profile --- */}
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute
+            allowedRoles={["admin", "staff", "doctor", "patient"]}
+          >
+            <Profile />
           </ProtectedRoute>
         }
       />

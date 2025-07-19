@@ -6,7 +6,6 @@ import { useParams, Link } from "react-router-dom";
 export default function MedicalRecordDetails() {
   const { id } = useParams();
   const [record, setRecord] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchRecord() {
@@ -14,12 +13,10 @@ export default function MedicalRecordDetails() {
       if (docSnap.exists()) {
         setRecord({ id: docSnap.id, ...docSnap.data() });
       }
-      setLoading(false);
     }
     fetchRecord();
   }, [id]);
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
   if (!record) return <div className="p-8 text-center">Record not found</div>;
 
   return (

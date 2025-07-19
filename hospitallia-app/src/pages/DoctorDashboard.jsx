@@ -5,20 +5,28 @@ import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 export default function DoctorDashboard() {
-  const { currentUser } = useAuth(); // get doctor's UID
+  const { currentUser } = useAuth();
   const [appointments, setAppointments] = useState([]);
+  const [records, setRecords] = useState(0);
 
   useEffect(() => {
     async function fetchDoctorAppointments() {
       if (!currentUser) return;
-      const q = query(
+      const qApt = query(
         collection(db, "appointments"),
         where("doctorId", "==", currentUser.uid)
       );
-      const aptsSnap = await getDocs(q);
+      const aptsSnap = await getDocs(qApt);
       setAppointments(
         aptsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
+      // Medical Records count
+      const qMed = query(
+        collection(db, "medicalRecords"),
+        where("doctorId", "==", currentUser.uid)
+      );
+      const recSnap = await getDocs(qMed);
+      setRecords(recSnap.size);
     }
     fetchDoctorAppointments();
   }, [currentUser]);
@@ -26,6 +34,18 @@ export default function DoctorDashboard() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Doctor Dashboard</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
+        <SummaryCard
+          title="Appointments"
+          value={appointments.length}
+          link="/appointments"
+        />
+        <SummaryCard
+          title="Medical Records"
+          value={records}
+          link="/medical-records"
+        />
+      </div>
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
         <h2 className="text-lg font-semibold mb-4">Upcoming Appointments</h2>
         <table className="w-full text-sm">
@@ -55,8 +75,28 @@ export default function DoctorDashboard() {
             ))}
           </tbody>
         </table>
+        <Link
+          to="/medical-records/add"
+          className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          + Add Medical Record
+        </Link>
       </div>
-      {/* You can add more cards/sections: e.g. link to view all, quick stats, etc. */}
+    </div>
+  );
+}
+
+function SummaryCard({ title, value, link }) {
+  return (
+    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow flex flex-col">
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <p className="text-3xl font-bold">{value}</p>
+      <Link
+        to={link}
+        className="mt-4 text-blue-600 dark:text-blue-200 underline text-sm"
+      >
+        View
+      </Link>
     </div>
   );
 }

@@ -23,9 +23,11 @@ export default function AddAppointment() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchLists() {
+      // Get all patients from patients collection
       const patSnap = await getDocs(collection(db, "patients"));
       setPatients(patSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      // Get all doctors from users collection
       const userSnap = await getDocs(collection(db, "users"));
       setDoctors(
         userSnap.docs
@@ -33,7 +35,7 @@ export default function AddAppointment() {
           .map((d) => ({ id: d.id, ...d.data() }))
       );
     }
-    fetchUsers();
+    fetchLists();
   }, []);
 
   const handleChange = (e) =>
@@ -48,7 +50,7 @@ export default function AddAppointment() {
         createdAt: serverTimestamp(),
       });
       navigate("/appointments");
-    } catch {
+    } catch (err) {
       alert("Failed to add appointment");
     }
     setLoading(false);
@@ -68,7 +70,7 @@ export default function AddAppointment() {
           <option value="">Select Patient</option>
           {patients.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.name}
+              {p.name || p.email}
             </option>
           ))}
         </select>
