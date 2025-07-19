@@ -9,10 +9,8 @@ export default function AppointmentList() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getName = (arr, id) =>
-    arr.find((x) => x.id === id)?.name ||
-    arr.find((x) => x.id === id)?.email ||
-    "Unknown";
+  const label = (u) =>
+    u ? (u.name ? `${u.name} (${u.email})` : u.email) : "Unknown";
 
   useEffect(() => {
     async function fetchAll() {
@@ -22,20 +20,19 @@ export default function AppointmentList() {
         getDocs(collection(db, "users")),
       ]);
       setAppointments(aptSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setPatients(
-        userSnap.docs
-          .filter((doc) => doc.data().role === "patient")
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
-      setDoctors(
-        userSnap.docs
-          .filter((doc) => doc.data().role === "doctor")
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      const allUsers = userSnap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPatients(allUsers.filter((u) => u.role === "patient"));
+      setDoctors(allUsers.filter((u) => u.role === "doctor"));
       setLoading(false);
     }
     fetchAll();
   }, []);
+
+  const getPatient = (id) => patients.find((u) => u.id === id);
+  const getDoctor = (id) => doctors.find((u) => u.id === id);
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this appointment?")) {
@@ -76,8 +73,8 @@ export default function AppointmentList() {
           )}
           {appointments.map((a) => (
             <tr key={a.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{getName(patients, a.patientId)}</td>
-              <td className="p-2">{getName(doctors, a.doctorId)}</td>
+              <td className="p-2">{label(getPatient(a.patientId))}</td>
+              <td className="p-2">{label(getDoctor(a.doctorId))}</td>
               <td className="p-2">{a.date}</td>
               <td className="p-2">{a.time}</td>
               <td className="p-2">{a.status}</td>

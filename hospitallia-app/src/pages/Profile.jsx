@@ -21,12 +21,15 @@ export default function Profile() {
       <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
       <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
         <div className="mb-2">
+          <strong>Name:</strong> {user.name}
+        </div>
+        <div className="mb-2">
           <strong>Email:</strong> {user.email}
         </div>
         <div className="mb-2">
           <strong>Role:</strong> {user.role}
         </div>
-        {/* Additional fields can go here, e.g. name, phone */}
+        {/* Additional fields can go here */}
       </div>
     </div>
   );

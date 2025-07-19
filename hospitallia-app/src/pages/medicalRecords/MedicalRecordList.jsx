@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function MedicalRecordList() {
   const [records, setRecords] = useState([]);
-  const [patients, setPatients] = useState([]);
+  const [users, setUsers] = useState([]);
   const { currentUser, role } = useAuth();
 
   useEffect(() => {
@@ -19,21 +19,16 @@ export default function MedicalRecordList() {
       }
       const recSnap = await getDocs(q);
       setRecords(recSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
-
-      const snap = await getDocs(collection(db, "users"));
-      setPatients(
-        snap.docs
-          .filter((doc) => doc.data().role === "patient")
-          .map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      const userSnap = await getDocs(collection(db, "users"));
+      setUsers(userSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     }
     fetchData();
   }, [currentUser, role]);
 
-  const patientName = (pid) =>
-    patients.find((p) => p.id === pid)?.name ||
-    patients.find((p) => p.id === pid)?.email ||
-    pid;
+  const getUserName = (id) => {
+    const u = users.find((u) => u.id === id);
+    return u ? (u.name ? `${u.name} (${u.email})` : u.email) : id;
+  };
 
   return (
     <div className="p-6">
@@ -43,7 +38,7 @@ export default function MedicalRecordList() {
           <tr className="bg-gray-100 dark:bg-gray-700">
             <th className="p-2">Patient</th>
             <th className="p-2">Date</th>
-            <th className="p-2">Doctor ID</th>
+            <th className="p-2">Doctor</th>
             <th className="p-2">Actions</th>
           </tr>
         </thead>
@@ -57,9 +52,9 @@ export default function MedicalRecordList() {
           )}
           {records.map((r) => (
             <tr key={r.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{patientName(r.patientId)}</td>
+              <td className="p-2">{getUserName(r.patientId)}</td>
               <td className="p-2">{r.date}</td>
-              <td className="p-2">{r.doctorId}</td>
+              <td className="p-2">{getUserName(r.doctorId)}</td>
               <td className="p-2 flex gap-2">
                 <Link
                   to={`/medical-records/${r.id}`}

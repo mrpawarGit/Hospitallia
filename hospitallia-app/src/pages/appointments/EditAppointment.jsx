@@ -26,7 +26,6 @@ export default function EditAppointment() {
 
   useEffect(() => {
     async function fetchAll() {
-      // Get doctor and patient lists
       const userSnap = await getDocs(collection(db, "users"));
       setPatients(
         userSnap.docs
@@ -38,8 +37,6 @@ export default function EditAppointment() {
           .filter((doc) => doc.data().role === "doctor")
           .map((doc) => ({ id: doc.id, ...doc.data() }))
       );
-
-      // Get appointment
       const aptDoc = await getDoc(doc(db, "appointments", id));
       if (aptDoc.exists()) {
         setForm({
@@ -73,6 +70,8 @@ export default function EditAppointment() {
     setLoading(false);
   };
 
+  const label = (u) => (u.name ? `${u.name} (${u.email})` : u.email);
+
   if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
@@ -89,7 +88,7 @@ export default function EditAppointment() {
           <option value="">Select Patient</option>
           {patients.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.name || p.email}
+              {label(p)}
             </option>
           ))}
         </select>
@@ -103,7 +102,7 @@ export default function EditAppointment() {
           <option value="">Select Doctor</option>
           {doctors.map((d) => (
             <option key={d.id} value={d.id}>
-              {d.name || d.email}
+              {label(d)}
             </option>
           ))}
         </select>

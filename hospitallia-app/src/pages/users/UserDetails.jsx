@@ -19,6 +19,9 @@ export default function UserDetails() {
       <h2 className="text-2xl font-bold mb-4">User Details</h2>
       <div className="bg-white dark:bg-gray-800 p-4 rounded shadow">
         <div className="mb-2">
+          <strong>Name:</strong> {user.name}
+        </div>
+        <div className="mb-2">
           <strong>Email:</strong> {user.email}
         </div>
         <div className="mb-2">

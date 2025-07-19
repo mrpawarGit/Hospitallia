@@ -22,10 +22,10 @@ export default function BillingList() {
     fetchAll();
   }, []);
 
-  const getPatientName = (pid) =>
-    patients.find((p) => p.id === pid)?.name ||
-    patients.find((p) => p.id === pid)?.email ||
-    pid;
+  const getPatientName = (pid) => {
+    const p = patients.find((p) => p.id === pid);
+    return p ? (p.name ? `${p.name} (${p.email})` : p.email) : pid;
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this bill?")) {

@@ -24,7 +24,7 @@ export default function UserList() {
       <table className="w-full table-auto border">
         <thead>
           <tr className="bg-gray-100 dark:bg-gray-800">
-            <th className="p-2">Email</th>
+            <th className="p-2">Name / Email</th>
             <th className="p-2">Role</th>
             <th className="p-2">Actions</th>
           </tr>
@@ -32,7 +32,9 @@ export default function UserList() {
         <tbody>
           {users.map((u) => (
             <tr key={u.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{u.email}</td>
+              <td className="p-2">
+                {u.name ? `${u.name} (${u.email})` : u.email}
+              </td>
               <td className="p-2">
                 <select
                   value={u.role}

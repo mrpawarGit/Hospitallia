@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 export default function DoctorDashboard() {
   const { currentUser } = useAuth();
   const [appointments, setAppointments] = useState([]);
-  const [records, setRecords] = useState(0);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    async function fetchDoctorAppointments() {
+    async function fetchData() {
       if (!currentUser) return;
       const qApt = query(
         collection(db, "appointments"),
@@ -20,32 +20,24 @@ export default function DoctorDashboard() {
       setAppointments(
         aptsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
-      // Medical Records count
-      const qMed = query(
-        collection(db, "medicalRecords"),
-        where("doctorId", "==", currentUser.uid)
-      );
-      const recSnap = await getDocs(qMed);
-      setRecords(recSnap.size);
+      const userSnap = await getDocs(collection(db, "users"));
+      setUsers(userSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     }
-    fetchDoctorAppointments();
+    fetchData();
   }, [currentUser]);
+
+  const getUserName = (uid) => {
+    const user = users.find((u) => u.id === uid);
+    return user
+      ? user.name
+        ? `${user.name} (${user.email})`
+        : user.email
+      : uid;
+  };
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Doctor Dashboard</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-        <SummaryCard
-          title="Appointments"
-          value={appointments.length}
-          link="/appointments"
-        />
-        <SummaryCard
-          title="Medical Records"
-          value={records}
-          link="/medical-records"
-        />
-      </div>
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
         <h2 className="text-lg font-semibold mb-4">Upcoming Appointments</h2>
         <table className="w-full text-sm">
@@ -67,7 +59,7 @@ export default function DoctorDashboard() {
             )}
             {appointments.map((a) => (
               <tr key={a.id}>
-                <td className="p-2">{a.patientName || a.patientId}</td>
+                <td className="p-2">{getUserName(a.patientId)}</td>
                 <td className="p-2">{a.date}</td>
                 <td className="p-2">{a.time}</td>
                 <td className="p-2">{a.status}</td>
@@ -82,21 +74,6 @@ export default function DoctorDashboard() {
           + Add Medical Record
         </Link>
       </div>
-    </div>
-  );
-}
-
-function SummaryCard({ title, value, link }) {
-  return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow flex flex-col">
-      <h2 className="text-lg font-semibold mb-2">{title}</h2>
-      <p className="text-3xl font-bold">{value}</p>
-      <Link
-        to={link}
-        className="mt-4 text-blue-600 dark:text-blue-200 underline text-sm"
-      >
-        View
-      </Link>
     </div>
   );
 }
