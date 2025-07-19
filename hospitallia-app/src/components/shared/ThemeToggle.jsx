@@ -4,7 +4,6 @@ export default function ThemeToggle() {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    // On mount: Read from localStorage or system preference
     const saved = localStorage.getItem("theme");
     const initial = saved
       ? saved
