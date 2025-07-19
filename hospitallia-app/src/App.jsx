@@ -1,12 +1,15 @@
-// src/App.jsx
 import Navbar from "./components/shared/Navbar";
+import Footer from "./components/shared/Footer";
 import AppRoutes from "./router/Routes";
 
 function App() {
   return (
-    <div className="min-h-screen bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 dark:text-gray-100">
       <Navbar />
-      <AppRoutes />
+      <main className="flex-1">
+        <AppRoutes />
+      </main>
+      <Footer />
     </div>
   );
 }
