@@ -10,17 +10,78 @@ import SignUp from "../contexts/auth/SignUp";
 import SignIn from "../contexts/auth/SignIn";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
-// Add any other pages
+
+// Patient management imports
+import PatientList from "../pages/patients/PatientList";
+import AddPatient from "../pages/patients/AddPatient";
+import EditPatient from "../pages/patients/EditPatient";
+
+// Appointment management imports
+import AppointmentList from "../pages/appointments/AppointmentList";
+import AddAppointment from "../pages/appointments/AddAppointment";
+import EditAppointment from "../pages/appointments/EditAppointment";
 
 export default function AppRoutes() {
   return (
     <Routes>
+      {/* Public routes */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="*" element={<NotFound />} />
 
-      {/* Protected routes with role check */}
+      {/* Patient Management: Protected CRUD routes */}
+      <Route
+        path="/patients"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <PatientList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patients/add"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <AddPatient />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patients/edit/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <EditPatient />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Appointment Management: Protected CRUD routes */}
+      <Route
+        path="/appointments"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff", "doctor"]}>
+            <AppointmentList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/appointments/add"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <AddAppointment />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/appointments/edit/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <EditAppointment />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Role-based dashboards */}
       <Route
         path="/admin"
         element={
@@ -54,8 +115,8 @@ export default function AppRoutes() {
         }
       />
 
-      {/* Example: public/fallback route */}
-      {/* <Route path="*" element={<NotFound />} /> */}
+      {/* 404 fallback at very end */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
