@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection, getDocs } from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditBill() {
@@ -11,20 +11,30 @@ export default function EditBill() {
     date: "",
     status: "",
   });
+  const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDoc(doc(db, "bills", id)).then((snap) => {
-      if (snap.exists()) setForm(snap.data());
+    async function fetchData() {
+      // Fetch patients (users with role 'patient')
+      const snap = await getDocs(collection(db, "users"));
+      setPatients(
+        snap.docs
+          .filter(doc => doc.data().role === "patient")
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+      );
+      // Fetch bill details
+      const billSnap = await getDoc(doc(db, "bills", id));
+      if (billSnap.exists()) setForm(billSnap.data());
       setLoading(false);
-    });
+    }
+    fetchData();
   }, [id]);
 
-  const handleChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     await updateDoc(doc(db, "bills", id), form);
@@ -32,10 +42,25 @@ export default function EditBill() {
   };
 
   if (loading) return <div className="text-center p-6">Loading...</div>;
+
   return (
     <div className="max-w-xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Edit Bill</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        <select
+          name="patientId"
+          value={form.patientId}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+        >
+          <option value="">Select Patient</option>
+          {patients.map(p => (
+            <option key={p.id} value={p.id}>
+              {p.name || p.email}
+            </option>
+          ))}
+        </select>
         <input
           type="number"
           name="amount"
@@ -61,10 +86,7 @@ export default function EditBill() {
           <option value="unpaid">Unpaid</option>
           <option value="paid">Paid</option>
         </select>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-          type="submit"
-        >
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
           Update Bill
         </button>
       </form>

@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import { doc, getDoc, updateDoc, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function EditAppointment() {
@@ -20,14 +26,17 @@ export default function EditAppointment() {
 
   useEffect(() => {
     async function fetchAll() {
-      // Get lists
-      const patSnap = await getDocs(collection(db, "patients"));
-      setPatients(patSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      // Get doctor and patient lists
       const userSnap = await getDocs(collection(db, "users"));
+      setPatients(
+        userSnap.docs
+          .filter((doc) => doc.data().role === "patient")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
       setDoctors(
         userSnap.docs
-          .filter((d) => d.data().role === "doctor")
-          .map((d) => ({ id: d.id, ...d.data() }))
+          .filter((doc) => doc.data().role === "doctor")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
       );
 
       // Get appointment
@@ -80,7 +89,7 @@ export default function EditAppointment() {
           <option value="">Select Patient</option>
           {patients.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.name}
+              {p.name || p.email}
             </option>
           ))}
         </select>

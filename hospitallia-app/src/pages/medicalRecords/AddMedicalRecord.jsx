@@ -21,8 +21,12 @@ export default function AddMedicalRecord() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDocs(collection(db, "patients")).then((snapshot) =>
-      setPatients(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
+    getDocs(collection(db, "users")).then((snap) =>
+      setPatients(
+        snap.docs
+          .filter((doc) => doc.data().role === "patient")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+      )
     );
   }, []);
 
@@ -54,7 +58,7 @@ export default function AddMedicalRecord() {
           <option value="">Select Patient</option>
           {patients.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.name}
+              {p.name || p.email}
             </option>
           ))}
         </select>

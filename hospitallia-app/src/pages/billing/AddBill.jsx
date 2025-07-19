@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../../firebase/config";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  serverTimestamp,
-} from "firebase/firestore";
+import { collection, addDoc, getDocs, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 
 export default function AddBill() {
@@ -19,15 +14,18 @@ export default function AddBill() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getDocs(collection(db, "patients")).then((snap) =>
-      setPatients(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
+    getDocs(collection(db, "users")).then(snap =>
+      setPatients(
+        snap.docs
+          .filter(doc => doc.data().role === "patient")
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+      )
     );
   }, []);
 
-  const handleChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     await addDoc(collection(db, "bills"), {
       ...form,
@@ -48,9 +46,9 @@ export default function AddBill() {
           className="w-full border p-2 rounded"
         >
           <option value="">Select Patient</option>
-          {patients.map((p) => (
+          {patients.map(p => (
             <option key={p.id} value={p.id}>
-              {p.name}
+              {p.name || p.email}
             </option>
           ))}
         </select>
@@ -80,10 +78,7 @@ export default function AddBill() {
           <option value="unpaid">Unpaid</option>
           <option value="paid">Paid</option>
         </select>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-          type="submit"
-        >
+        <button className="bg-blue-600 text-white px-4 py-2 rounded" type="submit">
           Add Bill
         </button>
       </form>

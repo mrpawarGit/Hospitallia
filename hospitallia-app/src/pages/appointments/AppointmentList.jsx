@@ -9,23 +9,28 @@ export default function AppointmentList() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Helper: Lookup by UID
-  const getName = (arr, id) => arr.find((x) => x.id === id)?.name || "Unknown";
+  const getName = (arr, id) =>
+    arr.find((x) => x.id === id)?.name ||
+    arr.find((x) => x.id === id)?.email ||
+    "Unknown";
 
   useEffect(() => {
     async function fetchAll() {
       setLoading(true);
-      const [aptSnap, patSnap, docSnap] = await Promise.all([
+      const [aptSnap, userSnap] = await Promise.all([
         getDocs(collection(db, "appointments")),
-        getDocs(collection(db, "patients")),
-        getDocs(collection(db, "users")), // Assuming doctors are in users collection with role='doctor'
+        getDocs(collection(db, "users")),
       ]);
       setAppointments(aptSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
-      setPatients(patSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setPatients(
+        userSnap.docs
+          .filter((doc) => doc.data().role === "patient")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
       setDoctors(
-        docSnap.docs
-          .filter((d) => d.data().role === "doctor")
-          .map((d) => ({ id: d.id, ...d.data() }))
+        userSnap.docs
+          .filter((doc) => doc.data().role === "doctor")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
       );
       setLoading(false);
     }

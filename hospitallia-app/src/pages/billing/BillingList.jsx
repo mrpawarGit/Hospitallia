@@ -5,11 +5,27 @@ import { Link } from "react-router-dom";
 
 export default function BillingList() {
   const [bills, setBills] = useState([]);
+  const [patients, setPatients] = useState([]);
   useEffect(() => {
-    getDocs(collection(db, "bills")).then((snap) =>
-      setBills(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })))
-    );
+    async function fetchAll() {
+      const [billSnap, userSnap] = await Promise.all([
+        getDocs(collection(db, "bills")),
+        getDocs(collection(db, "users")),
+      ]);
+      setBills(billSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setPatients(
+        userSnap.docs
+          .filter((doc) => doc.data().role === "patient")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+    }
+    fetchAll();
   }, []);
+
+  const getPatientName = (pid) =>
+    patients.find((p) => p.id === pid)?.name ||
+    patients.find((p) => p.id === pid)?.email ||
+    pid;
 
   const handleDelete = async (id) => {
     if (window.confirm("Delete this bill?")) {
@@ -30,7 +46,7 @@ export default function BillingList() {
       <table className="w-full table-auto border">
         <thead>
           <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="p-2">Patient ID</th>
+            <th className="p-2">Patient</th>
             <th className="p-2">Amount</th>
             <th className="p-2">Status</th>
             <th className="p-2">Date</th>
@@ -40,7 +56,7 @@ export default function BillingList() {
         <tbody>
           {bills.map((b) => (
             <tr key={b.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{b.patientId}</td>
+              <td className="p-2">{getPatientName(b.patientId)}</td>
               <td className="p-2">{b.amount}</td>
               <td className="p-2 capitalize">{b.status}</td>
               <td className="p-2">{b.date}</td>

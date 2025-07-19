@@ -6,6 +6,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function MedicalRecordList() {
   const [records, setRecords] = useState([]);
+  const [patients, setPatients] = useState([]);
   const { currentUser, role } = useAuth();
 
   useEffect(() => {
@@ -18,25 +19,21 @@ export default function MedicalRecordList() {
       }
       const recSnap = await getDocs(q);
       setRecords(recSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
+
+      const snap = await getDocs(collection(db, "users"));
+      setPatients(
+        snap.docs
+          .filter((doc) => doc.data().role === "patient")
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
     }
     fetchData();
   }, [currentUser, role]);
 
-  if (!records.length)
-    return (
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Medical Records</h2>
-        <p>No records found.</p>
-        {role === "doctor" && (
-          <Link
-            to="/medical-records/add"
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded inline-block"
-          >
-            + Add Medical Record
-          </Link>
-        )}
-      </div>
-    );
+  const patientName = (pid) =>
+    patients.find((p) => p.id === pid)?.name ||
+    patients.find((p) => p.id === pid)?.email ||
+    pid;
 
   return (
     <div className="p-6">
@@ -44,16 +41,23 @@ export default function MedicalRecordList() {
       <table className="w-full mt-2 table-auto border">
         <thead>
           <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="p-2">Patient ID</th>
+            <th className="p-2">Patient</th>
             <th className="p-2">Date</th>
             <th className="p-2">Doctor ID</th>
             <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
+          {records.length === 0 && (
+            <tr>
+              <td colSpan={4} className="text-center text-gray-500 py-8">
+                No records found.
+              </td>
+            </tr>
+          )}
           {records.map((r) => (
             <tr key={r.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{r.patientId}</td>
+              <td className="p-2">{patientName(r.patientId)}</td>
               <td className="p-2">{r.date}</td>
               <td className="p-2">{r.doctorId}</td>
               <td className="p-2 flex gap-2">
