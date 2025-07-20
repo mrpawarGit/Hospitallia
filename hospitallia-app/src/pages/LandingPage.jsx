@@ -4,12 +4,12 @@ export default function LandingPage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-100 via-white to-teal-50 py-16">
+      <section className="bg-gradient-to-r from-blue-100 via-white to-teal-50 dark:from-blue-950 dark:via-gray-900 dark:to-teal-900 py-16">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-blue-900 mb-4">
+          <h1 className="text-4xl sm:text-5xl font-bold text-blue-900 dark:text-blue-200 mb-4">
             Clinic Management Software for Modern Clinics &amp; Hospitals
           </h1>
-          <p className="text-lg sm:text-xl text-gray-700 mb-8">
+          <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-8">
             EMR, Appointments, Billing, Payments, Telemedicine &amp; More —
             All-in-One, Cloud-based, and Paperless.
           </p>
@@ -23,9 +23,9 @@ export default function LandingPage() {
       </section>
 
       {/* Trusted Clinics */}
-      <section className="py-6 bg-white border-b">
+      <section className="py-6 bg-white dark:bg-gray-900 border-b dark:border-gray-800">
         <div className="max-w-4xl mx-auto px-4 text-gray-500 text-center">
-          <span className="block font-semibold mb-2 text-gray-700">
+          <span className="block font-semibold mb-2 text-gray-700 dark:text-gray-200">
             Trusted by 10,000+ Clinics &amp; Hospitals
           </span>
           {/* Replace below with your real client logos */}
@@ -40,9 +40,9 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 bg-blue-50">
+      <section className="py-16 bg-blue-50 dark:bg-gray-900">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center text-blue-900 mb-12">
+          <h2 className="text-2xl font-bold text-center text-blue-900 dark:text-blue-200 mb-12">
             One Platform for All Your Clinic Operations
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -81,18 +81,18 @@ export default function LandingPage() {
       </section>
 
       {/* Product Preview */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
           <img
             src="https://docpulse.com/images/web-emr.png"
             alt="App dashboard preview"
-            className="rounded-lg shadow-lg border max-w-md w-full"
+            className="rounded-lg shadow-lg border max-w-md w-full dark:border-gray-700"
           />
           <div>
-            <h3 className="text-2xl font-bold text-blue-900 mb-3">
+            <h3 className="text-2xl font-bold text-blue-900 dark:text-blue-200 mb-3">
               Powerful Dashboard. Seamless Experience.
             </h3>
-            <ul className="text-gray-700 text-lg mb-4 space-y-2">
+            <ul className="text-gray-700 dark:text-gray-300 text-lg mb-4 space-y-2 text-left md:text-base">
               <li>• Intuitive interface for doctors, staff, and patients</li>
               <li>• Accessible anytime, anywhere — mobile & desktop</li>
               <li>• Effortless onboarding, migration & support</li>
@@ -108,9 +108,9 @@ export default function LandingPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-blue-50">
+      <section className="py-16 bg-blue-50 dark:bg-gray-900">
         <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-blue-900 text-center mb-10">
+          <h2 className="text-2xl font-bold text-blue-900 dark:text-blue-200 text-center mb-10">
             Designed for Every Stakeholder
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -172,6 +172,29 @@ export default function LandingPage() {
           </form>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-300 text-center py-6 border-t dark:border-gray-800">
+        <div className="container mx-auto">
+          <span className="font-semibold">
+            ClinicPulse © {new Date().getFullYear()}
+          </span>
+          <div className="mt-2 space-x-3 text-sm">
+            <Link to="/about" className="underline">
+              About
+            </Link>
+            <Link to="/contact" className="underline">
+              Contact
+            </Link>
+            <Link to="/privacy" className="underline">
+              Privacy
+            </Link>
+            <Link to="/terms" className="underline">
+              Terms
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
@@ -179,20 +202,24 @@ export default function LandingPage() {
 // --- Card Components ---
 function FeatureCard({ icon, title, description }) {
   return (
-    <div className="bg-white p-6 rounded shadow flex flex-col items-center text-center">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow flex flex-col items-center text-center">
       <div className="text-4xl mb-4">{icon}</div>
-      <h3 className="font-bold mb-2 text-blue-900">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="font-bold mb-2 text-blue-900 dark:text-blue-200">
+        {title}
+      </h3>
+      <p className="text-gray-600 dark:text-gray-300">{description}</p>
     </div>
   );
 }
 
 function BenefitCard({ icon, title, description }) {
   return (
-    <div className="bg-white p-6 rounded shadow flex flex-col items-center text-center">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow flex flex-col items-center text-center">
       <div className="text-4xl mb-3">{icon}</div>
-      <h4 className="font-semibold text-blue-900 mb-1">{title}</h4>
-      <p className="text-gray-600">{description}</p>
+      <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">
+        {title}
+      </h4>
+      <p className="text-gray-600 dark:text-gray-300">{description}</p>
     </div>
   );
 }
