@@ -76,7 +76,7 @@ export default function AppRoutes() {
       <Route
         path="/patients/details/:id"
         element={
-          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+          <ProtectedRoute allowedRoles={["admin", "staff", "doctor"]}>
             <PatientDetails />
           </ProtectedRoute>
         }
@@ -190,7 +190,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* User profile */}
+      {/* User profile (all authenticated roles) */}
       <Route
         path="/profile"
         element={
