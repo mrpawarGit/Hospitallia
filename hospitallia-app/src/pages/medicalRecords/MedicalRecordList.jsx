@@ -25,6 +25,7 @@ export default function MedicalRecordList() {
     fetchData();
   }, [currentUser, role]);
 
+  // Helper: Returns full name (and email) for a given user id
   const getUserName = (id) => {
     const u = users.find((u) => u.id === id);
     return u ? (u.name ? `${u.name} (${u.email})` : u.email) : id;
