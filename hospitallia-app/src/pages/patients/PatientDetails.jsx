@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 export default function PatientDetails() {
-  const { id } = useParams(); // patient user id
+  const { id } = useParams();
   const [user, setUser] = useState(null);
   const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(true);
