@@ -6,25 +6,24 @@ import ThemeToggle from "./ThemeToggle";
 const Navbar = () => {
   const { currentUser, role } = useAuth();
 
+  // Set dashboard path based on user role
   let dashboardPath = "/";
   if (role === "admin") dashboardPath = "/admin";
   else if (role === "doctor") dashboardPath = "/doctor";
   else if (role === "staff") dashboardPath = "/staff";
   else if (role === "patient") dashboardPath = "/patient";
 
-  // Helper: only show these links for staff/admin
+  // Role-based visibility for menu items
   const canSeeBilling = role === "admin" || role === "staff";
   const canSeePatients = role === "admin" || role === "staff";
   const canSeeAppointments =
     role === "admin" || role === "staff" || role === "doctor";
-  const canSeeMedicalRecords = !!role; // all logged-in roles
+  const canSeeMedicalRecords = !!role;
   const canSeeUserManagement = role === "admin";
-
-  // Only show "Profile" for logged in user
   const showProfile = !!currentUser;
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md mb-4 transition-colors">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-md transition-colors">
       <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
         <Link
           to="/"
@@ -95,7 +94,7 @@ const Navbar = () => {
                   Profile
                 </Link>
               )}
-              <span className="text-sm text-gray-400 dark:text-gray-300">
+              <span className="text-sm text-gray-400 dark:text-gray-300 ml-2">
                 {role && `(${role.charAt(0).toUpperCase() + role.slice(1)})`}
               </span>
               <LogoutButton />

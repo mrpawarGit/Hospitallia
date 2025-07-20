@@ -5,7 +5,7 @@ import AppRoutes from "./router/Routes";
 function App() {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 dark:text-gray-100">
-      <Navbar />
+      <Navbar  />
       <main className="flex-1">
         <AppRoutes />
       </main>
