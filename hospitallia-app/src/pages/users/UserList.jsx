@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export default function UserList() {
@@ -15,6 +21,14 @@ export default function UserList() {
     if (window.confirm(`Change role of user to ${role}?`)) {
       await updateDoc(doc(db, "users", id), { role });
       setUsers((users) => users.map((u) => (u.id === id ? { ...u, role } : u)));
+    }
+  };
+
+  const handleDelete = async (id, email, role) => {
+    if (role === "admin") return; // Prevent deleting admins!
+    if (window.confirm(`Delete user ${email}? This cannot be undone.`)) {
+      await deleteDoc(doc(db, "users", id));
+      setUsers((users) => users.filter((u) => u.id !== id));
     }
   };
 
@@ -47,13 +61,22 @@ export default function UserList() {
                   <option>patient</option>
                 </select>
               </td>
-              <td className="p-2">
+              <td className="p-2 flex gap-2">
                 <Link
                   to={`/users/${u.id}`}
                   className="bg-blue-600 text-white text-xs px-2 py-1 rounded"
                 >
                   Details
                 </Link>
+                {/* Show delete button only for non-admins */}
+                {u.role !== "admin" && (
+                  <button
+                    className="bg-red-600 text-white text-xs px-2 py-1 rounded"
+                    onClick={() => handleDelete(u.id, u.email, u.role)}
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
@@ -39,6 +39,7 @@ export default function PatientList() {
                 >
                   Details
                 </Link>
+                {/* You could add Edit/Delete here for staff/admin */}
               </td>
             </tr>
           ))}

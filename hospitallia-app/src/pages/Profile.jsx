@@ -36,7 +36,6 @@ export default function Profile() {
         }
       });
     }
-    // eslint-disable-next-line
   }, [currentUser]);
 
   const handleChange = (e) =>

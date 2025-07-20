@@ -235,6 +235,22 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/patients/details/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff", "doctor"]}>
+            <PatientDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserDetails />
+          </ProtectedRoute>
+        }
+      />
 
       {/* 404 fallback */}
       <Route path="*" element={<NotFound />} />
