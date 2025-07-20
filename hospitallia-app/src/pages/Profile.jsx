@@ -31,7 +31,7 @@ export default function Profile() {
           const user = snap.data();
           setForm({
             ...form,
-            ...user, // Auto-fills all supported fields
+            ...user,
           });
         }
       });
