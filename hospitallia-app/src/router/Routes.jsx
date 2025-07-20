@@ -11,32 +11,33 @@ import SignIn from "../contexts/auth/SignIn";
 import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
 
-// Patient management imports
+// Patient management
 import PatientList from "../pages/patients/PatientList";
 import AddPatient from "../pages/patients/AddPatient";
 import EditPatient from "../pages/patients/EditPatient";
+import PatientDetails from "../pages/patients/PatientDetails";
 
-// Appointment management imports
+// Appointment management
 import AppointmentList from "../pages/appointments/AppointmentList";
 import AddAppointment from "../pages/appointments/AddAppointment";
 import EditAppointment from "../pages/appointments/EditAppointment";
 
-// Medical Records management imports
+// Medical Records management
 import MedicalRecordList from "../pages/medicalRecords/MedicalRecordList";
 import AddMedicalRecord from "../pages/medicalRecords/AddMedicalRecord";
 import EditMedicalRecord from "../pages/medicalRecords/EditMedicalRecord";
 import MedicalRecordDetails from "../pages/medicalRecords/MedicalRecordDetails";
 
-// --- New! Billing management imports ---
+// Billing management
 import BillingList from "../pages/billing/BillingList";
 import AddBill from "../pages/billing/AddBill";
 import EditBill from "../pages/billing/EditBill";
 
-// --- New! User management imports ---
+// User management
 import UserList from "../pages/users/UserList";
 import UserDetails from "../pages/users/UserDetails";
 
-// --- New! Profile page import ---
+// Profile page
 import Profile from "../pages/Profile";
 
 export default function AppRoutes() {
@@ -69,6 +70,14 @@ export default function AppRoutes() {
         element={
           <ProtectedRoute allowedRoles={["admin", "staff"]}>
             <EditPatient />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/patients/details/:id"
+        element={
+          <ProtectedRoute allowedRoles={["admin", "staff"]}>
+            <PatientDetails />
           </ProtectedRoute>
         }
       />
@@ -137,7 +146,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* --- NEW: Billing/Invoices Management --- */}
+      {/* Billing/Invoices Management */}
       <Route
         path="/billing"
         element={
@@ -163,7 +172,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* --- NEW: User Management (ADMIN ONLY) --- */}
+      {/* User Management (admin only) */}
       <Route
         path="/users"
         element={
@@ -181,7 +190,7 @@ export default function AppRoutes() {
         }
       />
 
-      {/* --- NEW: User Profile --- */}
+      {/* User profile */}
       <Route
         path="/profile"
         element={

@@ -4,16 +4,21 @@ import { collection, getDocs } from "firebase/firestore";
 import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
-  const [patients, setPatients] = useState(0);
+  const [patientCount, setPatientCount] = useState(0);
   const [appointments, setAppointments] = useState(0);
   const [medRecords, setMedRecords] = useState(0);
 
   useEffect(() => {
     async function fetchCounts() {
-      const pats = await getDocs(collection(db, "patients"));
-      setPatients(pats.size);
+      // Patients: filter users by role 'patient'
+      const userSnap = await getDocs(collection(db, "users"));
+      setPatientCount(
+        userSnap.docs.filter((doc) => doc.data().role === "patient").length
+      );
+      // Appointments
       const apts = await getDocs(collection(db, "appointments"));
       setAppointments(apts.size);
+      // Medical Records
       const meds = await getDocs(collection(db, "medicalRecords"));
       setMedRecords(meds.size);
     }
@@ -24,7 +29,11 @@ export default function AdminDashboard() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
-        <SummaryCard title="Total Patients" value={patients} link="/patients" />
+        <SummaryCard
+          title="Total Patients"
+          value={patientCount}
+          link="/patients"
+        />
         <SummaryCard
           title="Total Appointments"
           value={appointments}

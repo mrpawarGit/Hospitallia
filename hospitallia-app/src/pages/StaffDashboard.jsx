@@ -10,8 +10,12 @@ export default function StaffDashboard() {
 
   useEffect(() => {
     async function fetchCounts() {
-      const pats = await getDocs(collection(db, "patients"));
-      setPatients(pats.size);
+      // Count users with role "patient"
+      const userSnap = await getDocs(collection(db, "users"));
+      const pts = userSnap.docs.filter(
+        (u) => u.data().role === "patient"
+      ).length;
+      setPatients(pts);
       const apts = await getDocs(collection(db, "appointments"));
       setAppointments(apts.size);
       const meds = await getDocs(collection(db, "medicalRecords"));

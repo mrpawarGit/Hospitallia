@@ -26,6 +26,7 @@ export default function DoctorDashboard() {
     fetchData();
   }, [currentUser]);
 
+  // Helper—get full patient label
   const getUserName = (uid) => {
     const user = users.find((u) => u.id === uid);
     return user
@@ -50,21 +51,22 @@ export default function DoctorDashboard() {
             </tr>
           </thead>
           <tbody>
-            {appointments.length === 0 && (
+            {appointments.length === 0 ? (
               <tr>
                 <td colSpan={4} className="text-center text-gray-500 py-4">
                   No Appointments Found
                 </td>
               </tr>
+            ) : (
+              appointments.map((a) => (
+                <tr key={a.id}>
+                  <td className="p-2">{getUserName(a.patientId)}</td>
+                  <td className="p-2">{a.date}</td>
+                  <td className="p-2">{a.time}</td>
+                  <td className="p-2">{a.status}</td>
+                </tr>
+              ))
             )}
-            {appointments.map((a) => (
-              <tr key={a.id}>
-                <td className="p-2">{getUserName(a.patientId)}</td>
-                <td className="p-2">{a.date}</td>
-                <td className="p-2">{a.time}</td>
-                <td className="p-2">{a.status}</td>
-              </tr>
-            ))}
           </tbody>
         </table>
         <Link

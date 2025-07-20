@@ -7,11 +7,13 @@ export default function PatientDashboard() {
   const { currentUser } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [users, setUsers] = useState([]);
+  const [bills, setBills] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
       if (!currentUser) return;
-      // Appointments
+
+      // Appointments (current user = patient)
       const qApt = query(
         collection(db, "appointments"),
         where("patientId", "==", currentUser.uid)
@@ -20,9 +22,18 @@ export default function PatientDashboard() {
       setAppointments(
         aptsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
-      // All users for doctor name lookup
+
+      // All users (to display doctor names in appointments)
       const userSnap = await getDocs(collection(db, "users"));
       setUsers(userSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+
+      // Bills (current user = patient)
+      const qBills = query(
+        collection(db, "bills"),
+        where("patientId", "==", currentUser.uid)
+      );
+      const billsSnap = await getDocs(qBills);
+      setBills(billsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     }
     fetchData();
   }, [currentUser]);
@@ -39,6 +50,8 @@ export default function PatientDashboard() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Patient Dashboard</h1>
+
+      {/* Appointments */}
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
         <h2 className="text-lg font-semibold mb-4">Your Appointments</h2>
         <table className="w-full text-sm">
@@ -64,6 +77,36 @@ export default function PatientDashboard() {
                 <td className="p-2">{a.date}</td>
                 <td className="p-2">{a.time}</td>
                 <td className="p-2">{a.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Bills */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
+        <h2 className="text-lg font-semibold mb-4">Your Bills</h2>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="bg-gray-100 dark:bg-gray-700">
+              <th className="p-2">Amount</th>
+              <th className="p-2">Status</th>
+              <th className="p-2">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bills.length === 0 && (
+              <tr>
+                <td colSpan={3} className="text-center text-gray-500 py-4">
+                  No Bills Found
+                </td>
+              </tr>
+            )}
+            {bills.map((b) => (
+              <tr key={b.id}>
+                <td className="p-2">{b.amount}</td>
+                <td className="p-2">{b.status}</td>
+                <td className="p-2">{b.date}</td>
               </tr>
             ))}
           </tbody>
