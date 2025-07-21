@@ -108,21 +108,6 @@ export default function LandingPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="px-4 py-16 bg-blue-600 text-white text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-6">
-          Ready to Transform Your Hospital?
-        </h2>
-        <p className="mb-8 max-w-2xl mx-auto">
-          Sign up and experience the future of hospital management. Seamless,
-          secure, and powerful.
-        </p>
-        <Link
-          to="/register"
-          className="bg-white text-blue-600 font-medium px-8 py-3 rounded-md hover:bg-gray-100 transition"
-        >
-          Register Now
-        </Link>
-      </section>
     </div>
   );
 }
