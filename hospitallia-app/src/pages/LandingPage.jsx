@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LandingPage() {
+  const { currentUser } = useAuth();
+
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       {/* Hero Section */}
@@ -14,12 +17,14 @@ export default function LandingPage() {
           and patients.
         </p>
         <div className="flex gap-4 flex-wrap justify-center">
-          <Link
-            to="/login"
-            className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition"
-          >
-            Get Started
-          </Link>
+          {!currentUser && (
+            <Link
+              to="/login"
+              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition"
+            >
+              Get Started
+            </Link>
+          )}
           <Link
             to="/about"
             className="border border-blue-600 text-blue-600 px-6 py-3 rounded-md hover:bg-blue-600 hover:text-white transition"
@@ -106,8 +111,6 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-
-      {/* Call to Action */}
     </div>
   );
 }
