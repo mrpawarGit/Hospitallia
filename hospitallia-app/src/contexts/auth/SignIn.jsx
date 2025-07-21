@@ -17,7 +17,11 @@ const SignIn = () => {
     setLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
       const userSnap = await getDoc(doc(db, "users", user.uid));
 
@@ -44,7 +48,9 @@ const SignIn = () => {
         onSubmit={handleSignIn}
         className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6"
       >
-        <h2 className="text-3xl font-semibold text-center text-blue-600 dark:text-blue-400">Login</h2>
+        <h2 className="text-3xl font-semibold text-center text-blue-600 dark:text-blue-400">
+          Login
+        </h2>
 
         {error && (
           <p className="text-sm text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300 border border-red-300 dark:border-red-700 p-2 rounded text-center">
@@ -73,10 +79,10 @@ const SignIn = () => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full py-2 rounded-lg font-semibold transition-colors ${
+          className={`w-full py-2 cursor-pointer rounded-lg font-semibold transition-colors ${
             loading
-              ? "bg-blue-400 dark:bg-blue-500 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+              ? "bg-blue-400 dark:bg-blue-500 r"
+              : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 "
           } text-white`}
         >
           {loading ? "Signing in..." : "Login"}
@@ -84,7 +90,10 @@ const SignIn = () => {
 
         <p className="text-sm text-center text-gray-600 dark:text-gray-400">
           Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <Link
+            to="/signup"
+            className="text-blue-600 cursor-pointer dark:text-blue-400 hover:underline"
+          >
             Sign Up
           </Link>
         </p>
