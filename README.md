@@ -11,26 +11,26 @@
 
 ## 🚀 Features
 
-* 🔐 **Role-based Auth & Dashboards**: Supports Admin, Staff, Doctor, and Patient views with secure access.
-* 🧭 **Smart Navigation**: Responsive fixed Navbar, theme toggle, and accessible sidebar navigation.
-* 🏠 **Landing Page**: Modern, DocPulse-style home page with clear feature sections and contact/demo CTA.
-* 🧍 **Patient Management**: Add, list, edit, and view patients with full demographic and clinical details.
-* 📅 **Appointments**: Schedule, update, and manage appointments with readable doctor/patient references.
-* 📁 **Medical Records**: Add, edit, and view records linked with patient and doctor identities.
-* 💵 **Billing System**: Issue, edit, and delete bills with per-patient tracking and status management.
-* 👥 **User Management**: View all users, edit roles, and safely delete non-admin accounts.
-* 👤 **Profile Self-Edit**: Let users update their info including contact, address, and personal bio.
-* 🌗 **Dark/Light Themes**: Fully responsive, theme-aware design with one-click toggle.
-* 🎞️ **Framer Motion**: Smooth page transitions and UI animations for better user experience.
+- 🔐 **Role-based Auth & Dashboards**: Supports Admin, Staff, Doctor, and Patient views with secure access.
+- 🧭 **Smart Navigation**: Responsive fixed Navbar, theme toggle, and accessible sidebar navigation.
+- 🏠 **Landing Page**: Modern, DocPulse-style home page with clear feature sections and contact/demo CTA.
+- 🧍 **Patient Management**: Add, list, edit, and view patients with full demographic and clinical details.
+- 📅 **Appointments**: Schedule, update, and manage appointments with readable doctor/patient references.
+- 📁 **Medical Records**: Add, edit, and view records linked with patient and doctor identities.
+- 💵 **Billing System**: Issue, edit, and delete bills with per-patient tracking and status management.
+- 👥 **User Management**: View all users, edit roles, and safely delete non-admin accounts.
+- 👤 **Profile Self-Edit**: Let users update their info including contact, address, and personal bio.
+- 🌗 **Dark/Light Themes**: Fully responsive, theme-aware design with one-click toggle.
+- 🎞️ **Framer Motion**: Smooth page transitions and UI animations for better user experience.
 
 ---
 
 ## 🖥️ Tech Stack
 
-* **Frontend**: React 18+, React Router 6+, Tailwind CSS (`darkMode: "class"`)
-* **State Management & UI**: React Context, Hooks, Framer Motion for animations
-* **Backend**: Firebase Authentication (Email/Password) and Firestore (NoSQL DB)
-* **Build Tool**: Vite for fast dev and optimized production builds
+- **Frontend**: React 18+, React Router 6+, Tailwind CSS (`darkMode: "class"`)
+- **State Management & UI**: React Context, Hooks, Framer Motion for animations
+- **Backend**: Firebase Authentication (Email/Password) and Firestore (NoSQL DB)
+- **Build Tool**: Vite for fast dev and optimized production builds
 
 ---
 
@@ -118,10 +118,6 @@
     ├── main.jsx
     └── index.css
 ```
-
-## 📸 Screenshots
-
-_(Add screenshots of dashboard, appointment system, billing UI etc.)_
 
 ## 🛠️ Setup Instructions
 
