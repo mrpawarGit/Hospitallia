@@ -24,21 +24,77 @@
 
 - **Frontend**: React, Tailwind CSS, React Router
 - **Backend**: Firebase (Authentication & Firestore DB)
-- **Deployment**: Netlify 
+- **Deployment**: Netlify
 
 ## 📂 Project Structure
 
 ```
-src/
-├── components/
-│   ├── auth/
-│   ├── dashboard/
-│   ├── shared/
-├── pages/
-├── firebase/
-├── App.jsx
-├── main.jsx
-└── index.css
+\---src
+    |   App.css
+    |   App.jsx
+    |   index.css
+    |   main.jsx
+    +---components
+    |   \---shared
+    |           Footer.jsx
+    |           LogoutButton.jsx
+    |           Navbar.jsx
+    |           ProtectedRoute.jsx
+    |           ThemeToggle.jsx
+    |
+    +---contexts
+    |   |   AuthContext.jsx
+    |   |
+    |   \---auth
+    |           SignIn.jsx
+    |           SignUp.jsx
+    |
+    +---firebase
+    |       config.js
+    |
+    +---pages
+    |   |   About.jsx
+    |   |   AdminDashboard.jsx
+    |   |   DoctorDashboard.jsx
+    |   |   Home.jsx
+    |   |   LandingPage.jsx
+    |   |   NotFound.jsx
+    |   |   PatientDashboard.jsx
+    |   |   Profile.jsx
+    |   |   StaffDashboard.jsx
+    |   |
+    |   +---appointments
+    |   |       AddAppointment.jsx
+    |   |       AppointmentList.jsx
+    |   |       EditAppointment.jsx
+    |   |
+    |   +---billing
+    |   |       AddBill.jsx
+    |   |       BillingList.jsx
+    |   |       EditBill.jsx
+    |   |
+    |   +---medicalRecords
+    |   |       AddMedicalRecord.jsx
+    |   |       EditMedicalRecord.jsx
+    |   |       MedicalRecordDetails.jsx
+    |   |       MedicalRecordList.jsx
+    |   |
+    |   +---patients
+    |   |       AddPatient.jsx
+    |   |       EditPatient.jsx
+    |   |       PatientDetails.jsx
+    |   |       PatientList.jsx
+    |   |
+    |   \---users
+    |           UserDetails.jsx
+    |           UserList.jsx
+    |
+    +---router
+    |       Routes.jsx
+    |
+    ├── App.jsx
+    ├── main.jsx
+    └── index.css
 ```
 
 ## 📸 Screenshots
