@@ -25,7 +25,6 @@ export default function MedicalRecordList() {
     fetchData();
   }, [currentUser, role]);
 
-  // Helper: Returns full name (and email) for a given user id
   const getUserName = (id) => {
     const u = users.find((u) => u.id === id);
     return u ? (u.name ? `${u.name} (${u.email})` : u.email) : id;
@@ -34,52 +33,68 @@ export default function MedicalRecordList() {
   return (
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Medical Records</h2>
-      <table className="w-full mt-2 table-auto border">
-        <thead>
-          <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="p-2">Patient</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Doctor</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.length === 0 && (
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <td colSpan={4} className="text-center text-gray-500 py-8">
-                No records found.
-              </td>
+              <th className="px-6 py-3">Patient</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3">Doctor</th>
+              <th className="px-6 py-3">Actions</th>
             </tr>
-          )}
-          {records.map((r) => (
-            <tr key={r.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{getUserName(r.patientId)}</td>
-              <td className="p-2">{r.date}</td>
-              <td className="p-2">{getUserName(r.doctorId)}</td>
-              <td className="p-2 flex gap-2">
-                <Link
-                  to={`/medical-records/${r.id}`}
-                  className="bg-blue-400 text-xs px-2 py-1 rounded text-white"
+          </thead>
+          <tbody>
+            {records.length === 0 && (
+              <tr>
+                <td
+                  colSpan={4}
+                  className="px-6 py-8 text-center text-gray-400 dark:text-gray-500"
                 >
-                  View
-                </Link>
-                {role === "doctor" && r.doctorId === currentUser.uid && (
+                  No records found.
+                </td>
+              </tr>
+            )}
+            {records.map((r, i) => (
+              <tr
+                key={r.id}
+                className={`border-b dark:border-gray-700 ${
+                  i % 2 === 0
+                    ? "bg-white dark:bg-gray-900"
+                    : "bg-gray-50 dark:bg-gray-800"
+                }`}
+              >
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {getUserName(r.patientId)}
+                </td>
+                <td className="px-6 py-4">{r.date}</td>
+                <td className="px-6 py-4">{getUserName(r.doctorId)}</td>
+                <td className="px-6 py-4 flex flex-wrap gap-2">
                   <Link
-                    to={`/medical-records/edit/${r.id}`}
-                    className="bg-yellow-400 text-xs px-2 py-1 rounded"
+                    to={`/medical-records/${r.id}`}
+                    className="text-blue-600 dark:text-blue-500 font-medium hover:underline"
                   >
-                    Edit
+                    View
                   </Link>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  {role === "doctor" && r.doctorId === currentUser.uid && (
+                    <Link
+                      to={`/medical-records/edit/${r.id}`}
+                      className="text-yellow-600 dark:text-yellow-400 font-medium hover:underline"
+                    >
+                      Edit
+                    </Link>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       {role === "doctor" && (
         <Link
           to="/medical-records/add"
-          className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+          className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           + Add Medical Record
         </Link>

@@ -29,10 +29,10 @@ export default function Profile() {
       getDoc(doc(db, "users", currentUser.uid)).then((snap) => {
         if (snap.exists()) {
           const user = snap.data();
-          setForm({
-            ...form,
+          setForm((f) => ({
+            ...f,
             ...user,
-          });
+          }));
         }
       });
     }
@@ -49,7 +49,7 @@ export default function Profile() {
         await updateEmail(currentUser, form.email);
       }
       await updateDoc(doc(db, "users", currentUser.uid), form);
-      setStatus("Profile updated");
+      setStatus("Profile updated successfully.");
       setEdit(false);
     } catch (err) {
       setStatus("Failed to update: " + err.message);
@@ -57,185 +57,110 @@ export default function Profile() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Your Profile</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md">
+      <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+        Your Profile
+      </h2>
+
       {status && (
         <div
-          className={
-            status.includes("Failed")
-              ? "text-red-600 mb-2"
-              : "text-green-600 mb-2"
-          }
+          className={`mb-4 text-sm font-medium ${
+            status.startsWith("Failed")
+              ? "text-red-600 dark:text-red-400"
+              : "text-green-600 dark:text-green-400"
+          }`}
         >
           {status}
         </div>
       )}
+
       {edit ? (
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Full Name"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Email"
-            required
-          />
-          <input
-            type="text"
-            name="contact"
-            value={form.contact}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Contact Number"
-          />
-          <input
-            type="text"
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Address"
-          />
-          <input
-            type="text"
-            name="bloodGroup"
-            value={form.bloodGroup}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Blood Group"
-          />
-          <input
-            type="number"
-            name="height"
-            value={form.height}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Height (cm)"
-          />
-          <input
-            type="number"
-            name="weight"
-            value={form.weight}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Weight (kg)"
-          />
-          <input
-            type="date"
-            name="dob"
-            value={form.dob}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Date of Birth"
-          />
-          <input
-            type="text"
-            name="gender"
-            value={form.gender}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Gender"
-          />
-          <input
-            type="text"
-            name="emergencyContact"
-            value={form.emergencyContact}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Emergency Contact"
-          />
-          <input
-            type="text"
-            name="insuranceNumber"
-            value={form.insuranceNumber}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Insurance Number"
-          />
-          <input
-            type="text"
-            name="allergies"
-            value={form.allergies}
-            onChange={handleChange}
-            className="w-full border p-2 rounded"
-            placeholder="Allergies"
-          />
-          <div className="text-gray-500">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+        >
+          {[
+            { name: "name", placeholder: "Full Name", type: "text" },
+            { name: "email", placeholder: "Email", type: "email" },
+            { name: "contact", placeholder: "Contact Number", type: "text" },
+            { name: "address", placeholder: "Address", type: "text" },
+            { name: "bloodGroup", placeholder: "Blood Group", type: "text" },
+            { name: "height", placeholder: "Height (cm)", type: "number" },
+            { name: "weight", placeholder: "Weight (kg)", type: "number" },
+            { name: "dob", placeholder: "Date of Birth", type: "date" },
+            { name: "gender", placeholder: "Gender", type: "text" },
+            {
+              name: "emergencyContact",
+              placeholder: "Emergency Contact",
+              type: "text",
+            },
+            {
+              name: "insuranceNumber",
+              placeholder: "Insurance Number",
+              type: "text",
+            },
+            { name: "allergies", placeholder: "Allergies", type: "text" },
+          ].map(({ name, placeholder, type }) => (
+            <input
+              key={name}
+              type={type}
+              name={name}
+              value={form[name]}
+              onChange={handleChange}
+              placeholder={placeholder}
+              className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring focus:border-blue-500"
+            />
+          ))}
+
+          <div className="sm:col-span-2 text-sm text-gray-600 dark:text-gray-400">
             Role: <span className="capitalize">{form.role}</span>
           </div>
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-            type="submit"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={() => setEdit(false)}
-            className="ml-3 text-gray-500"
-          >
-            Cancel
-          </button>
+
+          <div className="sm:col-span-2 flex gap-3 mt-2">
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => setEdit(false)}
+              className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white px-4 py-2 rounded"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       ) : (
-        <>
-          <div className="mb-2">
-            <strong>Name:</strong> {form.name}
-          </div>
-          <div className="mb-2">
-            <strong>Email:</strong> {form.email}
-          </div>
-          <div className="mb-2">
-            <strong>Contact:</strong> {form.contact}
-          </div>
-          <div className="mb-2">
-            <strong>Address:</strong> {form.address}
-          </div>
-          <div className="mb-2">
-            <strong>Blood Group:</strong> {form.bloodGroup}
-          </div>
-          <div className="mb-2">
-            <strong>Height:</strong> {form.height ? `${form.height} cm` : ""}
-          </div>
-          <div className="mb-2">
-            <strong>Weight:</strong> {form.weight ? `${form.weight} kg` : ""}
-          </div>
-          <div className="mb-2">
-            <strong>Date of Birth:</strong> {form.dob}
-          </div>
-          <div className="mb-2">
-            <strong>Gender:</strong> {form.gender}
-          </div>
-          <div className="mb-2">
-            <strong>Emergency Contact:</strong> {form.emergencyContact}
-          </div>
-          <div className="mb-2">
-            <strong>Insurance Number:</strong> {form.insuranceNumber}
-          </div>
-          <div className="mb-2">
-            <strong>Allergies:</strong> {form.allergies}
-          </div>
-          <div className="mb-2">
-            <strong>Role:</strong>{" "}
-            <span className="capitalize">{form.role}</span>
-          </div>
+        <div className="space-y-3 text-gray-700 dark:text-gray-200">
+          {[
+            ["Name", form.name],
+            ["Email", form.email],
+            ["Contact", form.contact],
+            ["Address", form.address],
+            ["Blood Group", form.bloodGroup],
+            ["Height", form.height ? `${form.height} cm` : ""],
+            ["Weight", form.weight ? `${form.weight} kg` : ""],
+            ["Date of Birth", form.dob],
+            ["Gender", form.gender],
+            ["Emergency Contact", form.emergencyContact],
+            ["Insurance Number", form.insuranceNumber],
+            ["Allergies", form.allergies],
+            ["Role", form.role],
+          ].map(([label, value]) => (
+            <div key={label}>
+              <strong>{label}:</strong>{" "}
+              <span className="capitalize">{value || "—"}</span>
+            </div>
+          ))}
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded mt-2"
             onClick={() => setEdit(true)}
+            className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >
             Edit Profile
           </button>
-        </>
+        </div>
       )}
     </div>
   );
