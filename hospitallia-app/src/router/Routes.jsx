@@ -39,6 +39,7 @@ import UserDetails from "../pages/users/UserDetails";
 
 // Profile page
 import Profile from "../pages/Profile";
+import About from "../pages/About";
 
 export default function AppRoutes() {
   return (
@@ -251,6 +252,8 @@ export default function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      <Route path="/about" element={<About />} />
 
       {/* 404 fallback */}
       <Route path="*" element={<NotFound />} />
