@@ -1,8 +1,43 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useEffect, useRef, useState } from "react";
 
 export default function LandingPage() {
   const { currentUser } = useAuth();
+  const carouselRef = useRef();
+  const [index, setIndex] = useState(0);
+
+  // Image assets and overlay text for each slide
+  const slides = [
+    {
+      src: "https://docpulse.com/wp-content/uploads/2024/02/slider-5.jpg",
+      heading: "Digital Healthcare, Effortless Care",
+      desc: "Switch to 100% paperless appointments, billing, and patient records — secure, compliant, and fast.",
+    },
+    {
+      src: "https://docpulse.com/wp-content/uploads/2024/02/slider-01.jpg",
+      heading: "Seamless Clinic Workflows",
+      desc: "All-in-one platform for doctors, patients, and staff. Appointments, EMR, reminders, and reporting built-in!",
+    },
+    {
+      src: "https://docpulse.com/wp-content/uploads/2024/02/slider-3.jpg",
+      heading: "Empowering Practice Management",
+      desc: "Modern dashboards, analytics, and notifications — accessible anywhere, on any device.",
+    },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  useEffect(() => {
+    if (carouselRef.current) {
+      carouselRef.current.style.transform = `translateX(-${index * 100}vw)`;
+    }
+  }, [index]);
 
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100">
@@ -31,6 +66,71 @@ export default function LandingPage() {
           >
             Learn More
           </Link>
+        </div>
+      </section>
+
+      {/* Full-Width Carousel Section with Text Overlays */}
+      <section className="relative w-full overflow-hidden">
+        <div
+          ref={carouselRef}
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ width: `${slides.length * 100}vw` }}
+        >
+          {slides.map((slide, idx) => (
+            <div
+              key={idx}
+              className="relative w-screen h-[40vw] max-h-[60vh] flex-shrink-0"
+              style={{ minWidth: "100vw" }}
+            >
+              <img
+                src={slide.src}
+                alt={`Slide ${idx + 1}`}
+                className="w-full h-full object-cover"
+                style={{ minWidth: "100vw" }}
+              />
+              {/* Overlay Text Content */}
+              <div
+                className="absolute inset-0 flex flex-col justify-center items-start px-8"
+                style={{
+                  background:
+                    "linear-gradient(90deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.01) 100%)",
+                }}
+              >
+                <h2 className="ml-6 text-2xl md:text-4xl font-bold mb-2 text-white drop-shadow-lg">
+                  {slide.heading}
+                </h2>
+                <p className="ml-6 text-md md:text-xl max-w-xl mb-4 text-white/90 drop-shadow-md">
+                  {slide.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        {/* Carousel Controls */}
+        <button
+          onClick={() => setIndex((index - 1 + slides.length) % slides.length)}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 text-white px-4 py-2 rounded-full z-10"
+        >
+          &#10094;
+        </button>
+        <button
+          onClick={() => setIndex((index + 1) % slides.length)}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 text-white px-4 py-2 rounded-full z-10"
+        >
+          &#10095;
+        </button>
+        {/* Dots */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          {slides.map((_, i) => (
+            <span
+              key={i}
+              className={`inline-block w-3 h-3 rounded-full border ${
+                index === i
+                  ? "bg-blue-600 border-blue-600"
+                  : "bg-white dark:bg-gray-800 border-gray-300"
+              }`}
+            />
+          ))}
         </div>
       </section>
 
