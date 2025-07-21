@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export default function BillingList() {
   const [bills, setBills] = useState([]);
   const [patients, setPatients] = useState([]);
+
   useEffect(() => {
     async function fetchAll() {
       const [billSnap, userSnap] = await Promise.all([
@@ -43,48 +44,76 @@ export default function BillingList() {
       >
         Add Bill
       </Link>
-      <table className="w-full table-auto border">
-        <thead>
-          <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="p-2">Patient</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bills.map((b) => (
-            <tr key={b.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{getPatientName(b.patientId)}</td>
-              <td className="p-2">{b.amount}</td>
-              <td className="p-2 capitalize">{b.status}</td>
-              <td className="p-2">{b.date}</td>
-              <td className="p-2 flex gap-2">
-                <Link
-                  to={`/billing/edit/${b.id}`}
-                  className="bg-yellow-400 text-xs px-2 py-1 rounded"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={() => handleDelete(b.id)}
-                  className="bg-red-600 text-white text-xs px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-          {bills.length === 0 && (
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <td colSpan={5} className="text-center text-gray-400 py-8">
-                No bills yet.
-              </td>
+              <th scope="col" className="px-6 py-3">
+                Patient
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Amount
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Actions
+              </th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {bills.map((b, i) => (
+              <tr
+                key={b.id}
+                className={`border-b dark:border-gray-700 ${
+                  i % 2 === 0
+                    ? "bg-white dark:bg-gray-900"
+                    : "bg-gray-50 dark:bg-gray-800"
+                }`}
+              >
+                <th
+                  scope="row"
+                  className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {getPatientName(b.patientId)}
+                </th>
+                <td className="px-6 py-4">${b.amount}</td>
+                <td className="px-6 py-4 capitalize">{b.status}</td>
+                <td className="px-6 py-4">{b.date}</td>
+                <td className="px-6 py-4 flex flex-wrap gap-2">
+                  <Link
+                    to={`/billing/edit/${b.id}`}
+                    className="text-blue-600 dark:text-blue-500 font-medium hover:underline"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(b.id)}
+                    className="text-red-600 font-medium hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {bills.length === 0 && (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="px-6 py-8 text-center text-gray-400 dark:text-gray-500"
+                >
+                  No bills yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

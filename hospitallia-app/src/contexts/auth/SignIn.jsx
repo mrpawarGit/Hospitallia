@@ -17,77 +17,77 @@ const SignIn = () => {
     setLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const userDocRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userDocRef);
+      const userSnap = await getDoc(doc(db, "users", user.uid));
 
       if (userSnap.exists()) {
-        const userRole = userSnap.data().role;
-        // Redirect based on user role
-        if (userRole === "admin") navigate("/admin");
-        else if (userRole === "doctor") navigate("/doctor");
-        else if (userRole === "staff") navigate("/staff");
-        else if (userRole === "patient") navigate("/patient");
+        const role = userSnap.data().role;
+        if (role === "admin") navigate("/admin");
+        else if (role === "doctor") navigate("/doctor");
+        else if (role === "staff") navigate("/staff");
+        else if (role === "patient") navigate("/patient");
         else navigate("/");
       } else {
         setError("User record not found. Please contact admin.");
       }
-    } catch (err) {
+    } catch {
       setError("Invalid email or password");
     }
+
     setLoading(false);
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
       <form
         onSubmit={handleSignIn}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-sm space-y-4"
+        className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6"
       >
-        <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">
-          Login
-        </h2>
+        <h2 className="text-3xl font-semibold text-center text-blue-600 dark:text-blue-400">Login</h2>
+
         {error && (
-          <div className="text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1 text-center text-sm">
+          <p className="text-sm text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300 border border-red-300 dark:border-red-700 p-2 rounded text-center">
             {error}
-          </div>
+          </p>
         )}
+
         <input
-          className="border px-3 py-2 rounded w-full focus:outline-blue-300"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="Email"
           required
         />
+
         <input
-          className="border px-3 py-2 rounded w-full focus:outline-blue-300"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="Password"
           required
         />
+
         <button
-          className={`w-full bg-blue-600 cursor-pointer text-white py-2 rounded hover:bg-blue-700 transition ${
-            loading ? "opacity-60 cursor-not-allowed" : ""
-          }`}
           type="submit"
           disabled={loading}
+          className={`w-full py-2 rounded-lg font-semibold transition-colors ${
+            loading
+              ? "bg-blue-400 dark:bg-blue-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+          } text-white`}
         >
           {loading ? "Signing in..." : "Login"}
         </button>
-        <div className="text-center text-gray-500 text-sm">
-          Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
+
+        <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-blue-600 dark:text-blue-400 hover:underline">
             Sign Up
           </Link>
-        </div>
+        </p>
       </form>
     </div>
   );

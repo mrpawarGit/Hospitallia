@@ -2,9 +2,10 @@ import { useState } from "react";
 import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
-  const [name, setName] = useState(""); // ← new
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
@@ -15,6 +16,7 @@ const SignUp = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -23,72 +25,101 @@ const SignUp = () => {
       );
       const user = userCredential.user;
       await setDoc(doc(db, "users", user.uid), {
-        name, // ← new
+        name,
         email,
         role,
         createdAt: new Date().toISOString(),
       });
       alert("Account created. You can now sign in.");
-      setName(""); // ← new
+      setName("");
       setEmail("");
       setPassword("");
       setRole("");
     } catch (err) {
       setError(err.message);
     }
+
     setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSignUp} className="space-y-4 max-w-sm mx-auto">
-      <h2 className="text-2xl font-bold">Sign Up</h2>
-      {error && <div className="text-red-600">{error}</div>}
-      <input
-        className="border px-2 py-1 rounded w-full"
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Full Name"
-        required
-      />
-      <input
-        className="border px-2 py-1 rounded w-full"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        required
-      />
-      <input
-        className="border px-2 py-1 rounded w-full"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        required
-      />
-      <select
-        className="border px-2 py-1 rounded w-full"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-        required
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
+      <form
+        onSubmit={handleSignUp}
+        className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6"
       >
-        <option value="">Select Role</option>
-        <option value="patient">Patient</option>
-        <option value="doctor">Doctor</option>
-        <option value="staff">Staff</option>
-        {/* Optionally allow admin creation only from a protected area */}
-      </select>
-      <button
-        className={`bg-blue-500 text-white py-1 px-4 rounded ${
-          loading ? "opacity-50" : ""
-        }`}
-        type="submit"
-        disabled={loading}
-      >
-        {loading ? "Signing up..." : "Sign Up"}
-      </button>
-    </form>
+        <h2 className="text-3xl font-semibold text-center text-blue-600 dark:text-blue-400">
+          Sign Up
+        </h2>
+
+        {error && (
+          <p className="text-sm text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300 border border-red-300 dark:border-red-700 p-2 rounded text-center">
+            {error}
+          </p>
+        )}
+
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Full Name"
+          required
+        />
+
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Email"
+          required
+        />
+
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+          placeholder="Password"
+          required
+        />
+
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          required
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="">Select Role</option>
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+          <option value="staff">Staff</option>
+        </select>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-2 rounded-lg font-semibold transition-colors ${
+            loading
+              ? "bg-blue-400 dark:bg-blue-500 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+          } text-white`}
+        >
+          {loading ? "Signing up..." : "Sign Up"}
+        </button>
+
+        <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            Login
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
 

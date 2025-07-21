@@ -52,50 +52,70 @@ export default function AppointmentList() {
       >
         Add Appointment
       </Link>
-      <table className="w-full mt-2 table-auto border">
-        <thead>
-          <tr className="bg-gray-100 dark:bg-gray-700">
-            <th className="p-2">Patient</th>
-            <th className="p-2">Doctor</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Time</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {appointments.length === 0 && (
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <td colSpan={6} className="text-center text-gray-500 py-8">
-                No appointments found.
-              </td>
+              <th scope="col" className="px-6 py-3">
+                Patient
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Doctor
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Date
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Time
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Actions
+              </th>
             </tr>
-          )}
-          {appointments.map((a) => (
-            <tr key={a.id} className="border-b dark:border-gray-700">
-              <td className="p-2">{label(getPatient(a.patientId))}</td>
-              <td className="p-2">{label(getDoctor(a.doctorId))}</td>
-              <td className="p-2">{a.date}</td>
-              <td className="p-2">{a.time}</td>
-              <td className="p-2">{a.status}</td>
-              <td className="p-2 flex gap-2">
-                <Link
-                  to={`/appointments/edit/${a.id}`}
-                  className="bg-yellow-400 text-xs px-2 py-1 rounded"
-                >
-                  Edit
-                </Link>
-                <button
-                  onClick={() => handleDelete(a.id)}
-                  className="bg-red-600 text-white text-xs px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {appointments.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center text-gray-500 py-8">
+                  No appointments found.
+                </td>
+              </tr>
+            )}
+            {appointments.map((a) => (
+              <tr
+                key={a.id}
+                className="odd:bg-white even:bg-gray-50 border-b dark:border-gray-700 odd:dark:bg-gray-900 even:dark:bg-gray-800"
+              >
+                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {label(getPatient(a.patientId))}
+                </td>
+                <td className="px-6 py-4">{label(getDoctor(a.doctorId))}</td>
+                <td className="px-6 py-4">{a.date}</td>
+                <td className="px-6 py-4">{a.time}</td>
+                <td className="px-6 py-4">{a.status}</td>
+                <td className="px-6 py-4 flex flex-wrap gap-2">
+                  <Link
+                    to={`/appointments/edit/${a.id}`}
+                    className="font-medium text-yellow-600 dark:text-yellow-400 hover:underline"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(a.id)}
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
