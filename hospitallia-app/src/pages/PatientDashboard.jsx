@@ -13,21 +13,19 @@ export default function PatientDashboard() {
     async function fetchData() {
       if (!currentUser) return;
 
-      // Appointments (current user = patient)
+      // Appointments
       const qApt = query(
         collection(db, "appointments"),
         where("patientId", "==", currentUser.uid)
       );
       const aptsSnap = await getDocs(qApt);
-      setAppointments(
-        aptsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      setAppointments(aptsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
 
-      // All users (to display doctor names in appointments)
+      // Users
       const userSnap = await getDocs(collection(db, "users"));
       setUsers(userSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
 
-      // Bills (current user = patient)
+      // Bills
       const qBills = query(
         collection(db, "bills"),
         where("patientId", "==", currentUser.uid)
@@ -35,6 +33,7 @@ export default function PatientDashboard() {
       const billsSnap = await getDocs(qBills);
       setBills(billsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     }
+
     fetchData();
   }, [currentUser]);
 
@@ -49,72 +48,92 @@ export default function PatientDashboard() {
 
   return (
     <div className="p-6">
-      <br />
-      <br />
-      <div className="p-4 rounded mb-8">
-        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200 text-center">
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200">
           Patient Dashboard
         </h1>
       </div>
 
       {/* Appointments */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
-        <h2 className="text-lg font-semibold mb-4">Your Appointments</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-700">
-              <th className="p-2">Doctor</th>
-              <th className="p-2">Date</th>
-              <th className="p-2">Time</th>
-              <th className="p-2">Status</th>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-10">
+        <h2 className="text-lg font-semibold px-6 py-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+          Your Appointments
+        </h2>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs uppercase bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-400">
+            <tr>
+              <th className="px-6 py-3">Doctor</th>
+              <th className="px-6 py-3">Date</th>
+              <th className="px-6 py-3">Time</th>
+              <th className="px-6 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
-            {appointments.length === 0 && (
+            {appointments.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center text-gray-500 py-4">
+                <td colSpan={4} className="text-center px-6 py-4 text-gray-500">
                   No Appointments Found
                 </td>
               </tr>
+            ) : (
+              appointments.map((a, index) => (
+                <tr
+                  key={a.id}
+                  className={`${
+                    index % 2 === 0
+                      ? "bg-white dark:bg-gray-900"
+                      : "bg-gray-50 dark:bg-gray-800"
+                  } border-b border-gray-200 dark:border-gray-700`}
+                >
+                  <th className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {getUserName(a.doctorId)}
+                  </th>
+                  <td className="px-6 py-4">{a.date}</td>
+                  <td className="px-6 py-4">{a.time}</td>
+                  <td className="px-6 py-4">{a.status}</td>
+                </tr>
+              ))
             )}
-            {appointments.map((a) => (
-              <tr key={a.id}>
-                <td className="p-2">{getUserName(a.doctorId)}</td>
-                <td className="p-2">{a.date}</td>
-                <td className="p-2">{a.time}</td>
-                <td className="p-2">{a.status}</td>
-              </tr>
-            ))}
           </tbody>
         </table>
       </div>
 
       {/* Bills */}
-      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
-        <h2 className="text-lg font-semibold mb-4">Your Bills</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-700">
-              <th className="p-2">Amount</th>
-              <th className="p-2">Status</th>
-              <th className="p-2">Date</th>
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <h2 className="text-lg font-semibold px-6 py-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+          Your Bills
+        </h2>
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs uppercase bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-400">
+            <tr>
+              <th className="px-6 py-3">Amount</th>
+              <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">Date</th>
             </tr>
           </thead>
           <tbody>
-            {bills.length === 0 && (
+            {bills.length === 0 ? (
               <tr>
-                <td colSpan={3} className="text-center text-gray-500 py-4">
+                <td colSpan={3} className="text-center px-6 py-4 text-gray-500">
                   No Bills Found
                 </td>
               </tr>
+            ) : (
+              bills.map((b, index) => (
+                <tr
+                  key={b.id}
+                  className={`${
+                    index % 2 === 0
+                      ? "bg-white dark:bg-gray-900"
+                      : "bg-gray-50 dark:bg-gray-800"
+                  } border-b border-gray-200 dark:border-gray-700`}
+                >
+                  <td className="px-6 py-4">{b.amount}</td>
+                  <td className="px-6 py-4">{b.status}</td>
+                  <td className="px-6 py-4">{b.date}</td>
+                </tr>
+              ))
             )}
-            {bills.map((b) => (
-              <tr key={b.id}>
-                <td className="p-2">{b.amount}</td>
-                <td className="p-2">{b.status}</td>
-                <td className="p-2">{b.date}</td>
-              </tr>
-            ))}
           </tbody>
         </table>
       </div>

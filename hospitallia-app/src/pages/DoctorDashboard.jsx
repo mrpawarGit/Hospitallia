@@ -26,7 +26,6 @@ export default function DoctorDashboard() {
     fetchData();
   }, [currentUser]);
 
-  // Helper—get full patient label
   const getUserName = (uid) => {
     const user = users.find((u) => u.id === uid);
     return user
@@ -38,46 +37,56 @@ export default function DoctorDashboard() {
 
   return (
     <div className="p-6">
-      <br />
-      <br />
-      <div className="p-4 rounded mb-8">
-        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200 text-center">
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200">
           Doctor Dashboard
         </h1>
       </div>
-      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
-        <h2 className="text-lg font-semibold mb-4">Upcoming Appointments</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-gray-100 dark:bg-gray-700">
-              <th className="p-2">Patient</th>
-              <th className="p-2">Date</th>
-              <th className="p-2">Time</th>
-              <th className="p-2">Status</th>
+
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">Patient</th>
+              <th scope="col" className="px-6 py-3">Date</th>
+              <th scope="col" className="px-6 py-3">Time</th>
+              <th scope="col" className="px-6 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan={4} className="text-center text-gray-500 py-4">
+                <td colSpan={4} className="text-center text-gray-500 px-6 py-4">
                   No Appointments Found
                 </td>
               </tr>
             ) : (
-              appointments.map((a) => (
-                <tr key={a.id}>
-                  <td className="p-2">{getUserName(a.patientId)}</td>
-                  <td className="p-2">{a.date}</td>
-                  <td className="p-2">{a.time}</td>
-                  <td className="p-2">{a.status}</td>
+              appointments.map((a, index) => (
+                <tr
+                  key={a.id}
+                  className={`${
+                    index % 2 === 0
+                      ? "bg-white dark:bg-gray-900"
+                      : "bg-gray-50 dark:bg-gray-800"
+                  } border-b border-gray-200 dark:border-gray-700`}
+                >
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {getUserName(a.patientId)}
+                  </th>
+                  <td className="px-6 py-4">{a.date}</td>
+                  <td className="px-6 py-4">{a.time}</td>
+                  <td className="px-6 py-4">{a.status}</td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-6 text-center">
         <Link
           to="/medical-records/add"
-          className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded"
+          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded"
         >
           + Add Medical Record
         </Link>
