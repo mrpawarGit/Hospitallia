@@ -4,7 +4,7 @@
 
 ## 🚀 Live Demo
 
-🌐 [https://hospitallia.netlify.app]([https://hospitallia.netlify.app](https://hospitallia-hms.netlify.app/))
+🌐 [Live - Hospitallia]([https://hospitallia.netlify.app](https://hospitallia-hms.netlify.app/))
 
 ---
 
