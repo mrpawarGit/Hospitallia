@@ -24,18 +24,7 @@
 
 - **Frontend**: React, Tailwind CSS, React Router
 - **Backend**: Firebase (Authentication & Firestore DB)
-- **Deployment**: Netlify / Vercel
-
-## ✨ Testimonials
-
-> “Managing inventory and appointments is a breeze. The role-based dashboard is a game changer!”  
-> — **Hospital Admin - Zenith Care**
-
-> “The appointment scheduling system has made my workflow so much smoother. I can focus more on my patients and less on paperwork.”  
-> — **Dr. Anika Sharma - General Physician**
-
-> “Patient check-ins and record updates are now super fast. The user-friendly interface has reduced our front desk chaos significantly!”  
-> — **Receptionist - Lifeline Multispeciality**
+- **Deployment**: Netlify 
 
 ## 📂 Project Structure
 
