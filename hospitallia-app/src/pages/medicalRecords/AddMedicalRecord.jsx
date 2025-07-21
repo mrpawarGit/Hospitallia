@@ -57,7 +57,8 @@ export default function AddMedicalRecord() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Add Medical Record</h2>
+      <br /><br />
+      <h2 className="text-2xl font-bold mb-4 text-center">Add Medical Record</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           name="patientId"

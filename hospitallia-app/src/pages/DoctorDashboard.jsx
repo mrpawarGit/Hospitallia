@@ -38,7 +38,13 @@ export default function DoctorDashboard() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Doctor Dashboard</h1>
+      <br />
+      <br />
+      <div className="p-4 rounded mb-8">
+        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200 text-center">
+          Doctor Dashboard
+        </h1>
+      </div>
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">
         <h2 className="text-lg font-semibold mb-4">Upcoming Appointments</h2>
         <table className="w-full text-sm">

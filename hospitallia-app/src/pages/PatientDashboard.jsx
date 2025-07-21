@@ -49,7 +49,13 @@ export default function PatientDashboard() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Patient Dashboard</h1>
+      <br />
+      <br />
+      <div className="p-4 rounded mb-8">
+        <h1 className="text-3xl font-bold text-blue-800 dark:text-blue-200 text-center">
+          Patient Dashboard
+        </h1>
+      </div>
 
       {/* Appointments */}
       <div className="bg-white dark:bg-gray-800 p-6 rounded shadow mb-8">

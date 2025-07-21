@@ -18,7 +18,8 @@ export default function PatientList() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+      <br /><br />
+      <h2 className="text-2xl text-center font-bold text-gray-800 dark:text-white mb-4">
         Patients
       </h2>
 

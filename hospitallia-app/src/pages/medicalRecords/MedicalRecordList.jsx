@@ -32,6 +32,8 @@ export default function MedicalRecordList() {
 
   return (
     <div className="p-6">
+      <br />
+      <br />
       <h2 className="text-2xl font-bold mb-4">Medical Records</h2>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

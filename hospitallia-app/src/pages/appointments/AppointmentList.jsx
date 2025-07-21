@@ -45,7 +45,8 @@ export default function AppointmentList() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Appointments</h2>
+      <br /><br />
+      <h2 className="text-2xl font-bold text-center mb-4">Appointments</h2>
       <Link
         to="/appointments/add"
         className="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block"

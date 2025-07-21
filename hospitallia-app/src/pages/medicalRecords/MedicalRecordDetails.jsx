@@ -33,6 +33,8 @@ export default function MedicalRecordDetails() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
+      <br />
+      <br />
       <h2 className="text-2xl font-bold mb-4">Medical Record Details</h2>
       <div className="bg-white dark:bg-gray-800 rounded shadow p-6">
         <div className="mb-2">

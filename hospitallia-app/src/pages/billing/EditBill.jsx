@@ -51,7 +51,9 @@ export default function EditBill() {
   if (loading) return <div className="text-center p-6">Loading...</div>;
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Edit Bill</h2>
+      <br />
+      <br />
+      <h2 className="text-2xl font-bold mb-4 text-center">Edit Bill</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           name="patientId"

@@ -34,8 +34,8 @@ export default function AddPatient() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Add Patient</h2>
+    <div className="max-w-xl mx-auto p-6"><br /><br />
+      <h2 className="text-2xl font-bold text-center mb-4">Add Patient</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="name"

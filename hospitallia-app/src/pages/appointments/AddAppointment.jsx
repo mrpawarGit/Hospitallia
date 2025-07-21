@@ -60,8 +60,8 @@ export default function AddAppointment() {
   const label = (u) => (u.name ? `${u.name} (${u.email})` : u.email);
 
   return (
-    <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Add Appointment</h2>
+    <div className="max-w-xl mx-auto p-6"><br /><br />
+      <h2 className="text-2xl font-bold mb-4 text-center">Add Appointment</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           name="patientId"

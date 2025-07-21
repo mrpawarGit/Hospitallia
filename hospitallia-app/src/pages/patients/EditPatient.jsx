@@ -53,6 +53,7 @@ export default function EditPatient() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
+      <br /><br />
       <h2 className="text-2xl font-bold mb-4">Edit Patient</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input

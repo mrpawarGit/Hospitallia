@@ -37,7 +37,8 @@ export default function BillingList() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Billing / Invoices</h2>
+      <br /><br />
+      <h2 className="text-2xl text-center font-bold mb-4">Billing / Invoices</h2>
       <Link
         to="/billing/add"
         className="bg-green-600 text-white px-4 py-2 rounded mb-4 inline-block"

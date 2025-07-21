@@ -37,7 +37,8 @@ export default function PatientDetails() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Patient Details</h1>
+      <br /><br />
+      <h1 className="text-2xl text-center font-bold mb-4">Patient Details</h1>
       <div className="bg-white dark:bg-gray-800 p-4 rounded shadow mb-6">
         <div>
           <strong>Name:</strong> {user.name}

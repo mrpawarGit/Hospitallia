@@ -44,7 +44,8 @@ export default function AddBill() {
 
   return (
     <div className="max-w-xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Add Bill</h2>
+      <br /><br />
+      <h2 className="text-2xl text-center font-bold mb-4">Add Bill</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           name="patientId"
