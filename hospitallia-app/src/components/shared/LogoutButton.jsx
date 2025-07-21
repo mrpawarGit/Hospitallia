@@ -5,10 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
   const navigate = useNavigate();
+
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/login");
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+
   return (
     <button
       onClick={handleLogout}
@@ -20,4 +26,5 @@ const LogoutButton = () => {
     </button>
   );
 };
+
 export default LogoutButton;

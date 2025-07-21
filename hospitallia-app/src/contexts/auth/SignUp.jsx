@@ -1,8 +1,9 @@
+// src/contexts/auth/SignUp.jsx
 import { useState } from "react";
 import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -11,6 +12,7 @@ const SignUp = () => {
   const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -24,17 +26,23 @@ const SignUp = () => {
         password
       );
       const user = userCredential.user;
+
       await setDoc(doc(db, "users", user.uid), {
         name,
         email,
         role,
         createdAt: new Date().toISOString(),
       });
-      alert("Account created. You can now sign in.");
-      setName("");
-      setEmail("");
-      setPassword("");
-      setRole("");
+
+      // Optional alert
+      // alert("Account created. Redirecting to your dashboard...");
+
+      // Redirect based on role
+      if (role === "admin") navigate("/admin");
+      else if (role === "doctor") navigate("/doctor");
+      else if (role === "staff") navigate("/staff");
+      else if (role === "patient") navigate("/patient");
+      else navigate("/");
     } catch (err) {
       setError(err.message);
     }
