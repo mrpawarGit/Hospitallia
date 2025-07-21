@@ -126,7 +126,3 @@ npm run dev
 ## 🙋‍♂️ Author
 
 Built with ❤️ by [Mayur](https://github.com/mrpawarGit)
-
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
