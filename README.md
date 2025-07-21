@@ -87,8 +87,7 @@
     |   |
     |   \---users
     |           UserDetails.jsx
-    |           UserList.jsx
-    |
+    |           UserList.jsx|
     +---router
     |       Routes.jsx
     |
