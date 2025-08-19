@@ -3,12 +3,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAa5ZltFwco-ka-I3efJgR5QUPuvRq8Qzs",
-  authDomain: "hospitallia-app.firebaseapp.com",
-  projectId: "hospitallia-app",
-  storageBucket: "hospitallia-app.firebasestorage.app",
-  messagingSenderId: "572644743390",
-  appId: "1:572644743390:web:d6b8b83d64144271208a4f",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
