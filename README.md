@@ -8,6 +8,10 @@
 
 ---
 
+<img width="1897" height="910" alt="image" src="https://github.com/user-attachments/assets/9a4849dd-4d9d-43b0-9d76-8cf9ed13418b" />
+
+---
+
 ## 🚀 Features
 
 - 🔐 **Role-based Auth & Dashboards**: Supports Admin, Staff, Doctor, and Patient views with secure access.
